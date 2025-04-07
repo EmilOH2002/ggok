@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gossip Girl - Secretos</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+        }
+        h1 {
+            font-size: 3em;
+            color: #f4c542;
+            margin-bottom: 20px;
+            font-family: 'Georgia', serif;
+        }
+        .secrets {
+            margin-top: 30px;
+            text-align: left;
+        }
+        .secret {
+            background-color: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .new-secret {
+            margin-top: 20px;
+        }
+        input[type="text"], textarea {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #555;
+            color: #fff;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #f4c542;
+            border: none;
+            color: #000;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c8a52e;
+        }
+        .icon {
+            font-size: 2em;
+            color: #f4c542;
+            animation: blink 1s infinite alternate;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Gossip Girl</h1>
+        <div class="new-secret">
+            <input type="text" id="newSecretInput" placeholder="Escribe tu chisme...">
+            <button id="postSecretBtn">Publicar Secreto</button>
+        </div>
+
+        <div class="secrets" id="secretsContainer">
+            <!-- Los secretos se cargarán aquí -->
+        </div>
+
+        <div class="icon">XOXO</div>
+    </div>
+
+    <script>
+        // Función para cargar secretos del Local Storage
+        function loadSecrets() {
+            let secrets = JSON.parse(localStorage.getItem('secrets')) || [];
+            const secretsContainer = document.getElementById('secretsContainer');
+            secretsContainer.innerHTML = ''; // Limpiar el contenedor antes de agregar
+
+            secrets.forEach(secret => {
+                const secretElement = document.createElement('div');
+                secretElement.classList.add('secret');
+                secretElement.textContent = secret;
+                secretsContainer.appendChild(secretElement);
+            });
+        }
+
+        // Función para guardar un nuevo secreto en Local Storage
+        function saveSecret(secret) {
+            let secrets = JSON.parse(localStorage.getItem('secrets')) || [];
+            secrets.push(secret);
+            localStorage.setItem('secrets', JSON.stringify(secrets));
+        }
+
+        // Evento para publicar un nuevo secreto
+        document.getElementById('postSecretBtn').addEventListener('click', () => {
+            const newSecretInput = document.getElementById('newSecretInput');
+            const newSecret = newSecretInput.value.trim();
+            if (newSecret) {
+                saveSecret(newSecret); // Guardar el secreto
+                loadSecrets(); // Recargar los secretos
+                newSecretInput.value = ''; // Limpiar el campo de texto
+            }
+        });
+
+        // Cargar los secretos cuando la página se cargue
+        window.onload = loadSecrets;
+    </script>
+
+</body>
+</html>
